@@ -16,11 +16,6 @@ class Absence extends Model
     public $casts = ['absent_at:date'];
 
     /**
-     * @var string[]
-     */
-    public $with = ['passenger'];
-
-    /**
      * @return BelongsTo
      */
     public function passenger(): BelongsTo {

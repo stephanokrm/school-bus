@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class SchoolFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'address_id' => Address::factory(),
+            'name' => $this->faker->company(),
         ];
     }
 }

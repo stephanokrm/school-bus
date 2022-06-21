@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\AbsenceController;
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\DriverController;
+use App\Http\Controllers\PassengerController;
+use App\Http\Controllers\RouteController;
+use App\Http\Controllers\SchoolController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +20,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum'])->group(function() {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::apiResource('absences', AbsenceController::class)->only(['index', 'store', 'destroy']);
+    Route::apiResource('addresses', AddressController::class);
+    Route::apiResource('drivers', DriverController::class);
+    Route::apiResource('passengers', PassengerController::class);
+    Route::apiResource('routes', RouteController::class);
+    Route::apiResource('schools', SchoolController::class);
 });

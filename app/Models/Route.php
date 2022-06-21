@@ -16,11 +16,6 @@ class Route extends Model
     public $casts = ['order:integer'];
 
     /**
-     * @var string[]
-     */
-    public $with = ['passenger', 'school'];
-
-    /**
      * @return BelongsTo
      */
     public function passenger(): BelongsTo {

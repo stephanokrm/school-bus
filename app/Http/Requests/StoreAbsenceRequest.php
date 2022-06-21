@@ -13,7 +13,7 @@ class StoreAbsenceRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StoreAbsenceRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'absent_at' => ['required', 'date', 'after_or_equal:today'],
+            'passenger_id' => ['required', 'numeric', 'exists:passengers'],
         ];
     }
 }

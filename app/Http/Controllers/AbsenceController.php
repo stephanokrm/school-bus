@@ -3,63 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAbsenceRequest;
-use App\Http\Requests\UpdateAbsenceRequest;
 use App\Models\Absence;
+use App\Models\Passenger;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class AbsenceController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return Builder[]|Collection
      */
-    public function index()
+    public function index(): array | Collection
     {
-        //
+        return Absence::query()
+            ->whereIn('passenger_id', Passenger::query()->whereBelongsTo(auth()->user(), 'responsible')->pluck('id'))
+            ->get();
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreAbsenceRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  StoreAbsenceRequest  $request
+     * @return Builder|Model
      */
-    public function store(StoreAbsenceRequest $request)
+    public function store(StoreAbsenceRequest $request): Builder | Model
     {
-        //
+        return Absence::query()->create($request->all());
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Absence  $absence
-     * @return \Illuminate\Http\Response
+     * @param  Absence  $absence
+     * @return bool|null
      */
-    public function show(Absence $absence)
+    public function destroy(Absence $absence): bool | null
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateAbsenceRequest  $request
-     * @param  \App\Models\Absence  $absence
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateAbsenceRequest $request, Absence $absence)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Absence  $absence
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Absence $absence)
-    {
-        //
+        return $absence->delete();
     }
 }

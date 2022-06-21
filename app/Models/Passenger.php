@@ -16,11 +16,6 @@ class Passenger extends Model
     public $casts = ['goes:boolean', 'returns:boolean', 'shift:string'];
 
     /**
-     * @var string[]
-     */
-    public $with = ['address'];
-
-    /**
      * @return BelongsTo
      */
     public function address(): BelongsTo {
