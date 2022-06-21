@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Password::defaults(function () {
+            $rule = Password::default();
+
+            return $this->app->isProduction()
+                ? $rule->letters()->mixedCase()->numbers()->symbols()->uncompromised()
+                : $rule;
+        });
     }
 }

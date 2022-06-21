@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Passenger;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class AbsenceFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'absent_at' => $this->faker->date(),
+            'passenger_id' => Passenger::factory(),
         ];
     }
 }
