@@ -2,29 +2,24 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class StoreDriverRequest extends FormRequest
+class StoreDriverRequest extends StoreUserRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return parent::authorize();
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
+     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            ...parent::rules(),
+            'cnh' => ['required', 'string', 'size:11', 'unique:drivers'],
         ];
     }
 }

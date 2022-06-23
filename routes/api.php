@@ -27,10 +27,12 @@ Route::middleware(['auth:api'])->group(function() {
 
     Route::apiResource('absences', AbsenceController::class)->only(['index', 'store', 'destroy']);
     Route::apiResource('addresses', AddressController::class);
-    Route::apiResource('drivers', DriverController::class);
+    Route::apiResource('drivers', DriverController::class)->except(['store']);
     Route::apiResource('passengers', PassengerController::class);
     Route::apiResource('routes', RouteController::class);
     Route::apiResource('schools', SchoolController::class);
 });
+
+Route::apiResource('drivers', DriverController::class)->only(['store']);
 
 require __DIR__.'/auth.php';

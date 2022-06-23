@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDriverRequest;
 use App\Http\Requests\UpdateDriverRequest;
 use App\Models\Driver;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class DriverController extends Controller
 {
@@ -19,14 +21,22 @@ class DriverController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreDriverRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  StoreDriverRequest  $request
+     * @return Driver
      */
-    public function store(StoreDriverRequest $request)
+    public function store(StoreDriverRequest $request): Driver
     {
-        //
+        $user = User::query()->create([
+            ...$request->all(),
+            'password' => Hash::make($request->get('password')),
+        ]);
+
+        $driver = new Driver;
+        $driver->fill($request->all());
+        $driver->user()->associate($user);
+        $driver->save();
+
+        return $driver;
     }
 
     /**

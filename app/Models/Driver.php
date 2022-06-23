@@ -13,7 +13,12 @@ class Driver extends Model
     /**
      * @var string[]
      */
-    public $casts = ['cnh:string'];
+    protected $casts = ['cnh:string'];
+
+    /**
+     * @var string[]
+     */
+    protected $fillable = ['cnh'];
 
     /**
      * @return BelongsTo
