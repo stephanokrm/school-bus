@@ -3,45 +3,26 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
     /**
-     * Handle an incoming registration request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * @param  RegisterRequest  $request
+     * @return Builder|Model
      */
-    public function store(Request $request)
+    public function store(RegisterRequest $request): Builder|Model
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'cpf' => ['required', 'string', 'size:11', 'unique:users'],
-            'phone' => ['required', 'string', 'size:11'],
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        return User::query()->create([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'password' => Hash::make($request->get('password')),
             'cpf' => $request->get('cpf'),
             'phone' => $request->get('phone'),
         ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return response()->noContent();
     }
 }

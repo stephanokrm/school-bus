@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Password::defaults(function () {
-            $rule = Password::default();
+            $rule = Password::min(8);
 
             return $this->app->isProduction()
                 ? $rule->letters()->mixedCase()->numbers()->symbols()->uncompromised()
