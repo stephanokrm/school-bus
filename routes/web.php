@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return ['Laravel' => app()->version()];
+});
+
+Route::middleware(['auth:api'])->group(function() {
+    Route::post('/oauth/revoke', function (Request $request) {
+        $request->user()->token()->revoke();
+
+        return response()->noContent();
+    });
 });
