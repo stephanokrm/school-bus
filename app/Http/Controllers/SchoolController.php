@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
+use App\Models\Driver;
 use App\Models\School;
 use App\Models\Address;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,8 +17,12 @@ class SchoolController extends Controller
      */
     public function index(): array|Collection
     {
-        return School::query()
+        $driver = Driver::query()
             ->whereBelongsTo(auth()->user())
+            ->first();
+
+        return School::query()
+            ->whereBelongsTo($driver)
             ->with('address')
             ->get();
     }
@@ -28,6 +33,10 @@ class SchoolController extends Controller
      */
     public function store(StoreSchoolRequest $request): School
     {
+        $driver = Driver::query()
+            ->whereBelongsTo(auth()->user())
+            ->first();
+
         $address = new Address;
         $address->fill($request->all());
         $address->setAttribute('external_city_id', 1);
@@ -36,19 +45,17 @@ class SchoolController extends Controller
         $school = new School;
         $school->fill($request->all());
         $school->address()->associate($address);
-        $school->driver()->associate(auth()->user());
+        $school->driver()->associate($driver);
         $school->save();
 
         return $school;
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\School  $school
-     * @return \Illuminate\Http\Response
+     * @param  School  $school
+     * @return School
      */
-    public function show(School $school)
+    public function show(School $school): School
     {
         return $school->load('address');
     }
