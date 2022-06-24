@@ -28,7 +28,7 @@ class StorePassengerRequest extends FormRequest
             'user.email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'user.cpf' => ['required', 'string', 'size:11', 'unique:users,cpf'],
             'user.phone' => ['required', 'string', 'size:11'],
-
+            
             'address.number' => ['required','integer','min:1','max:9999999'],
             'address.complement' => ['nullable','string','max:255'],
             'address.neighborhood' => ['required','string','max:255'],
@@ -38,7 +38,7 @@ class StorePassengerRequest extends FormRequest
             'passenger.name' => ['required', 'string', 'max:255'],
             'passenger.goes' => ['nullable', 'integer'],
             'passenger.returns' => ['nullable', 'integer'],
-            'passenger.shift' => ['in:"M","A","N"'],
+            'passenger.shift' => ['required','in:"M","A","N"'],
         ];
     }
 

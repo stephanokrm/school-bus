@@ -76,7 +76,21 @@ class PassengerController extends Controller
      */
     public function update(UpdatePassengerRequest $request, Passenger $passenger)
     {
-        //
+        $passengerRequest = $request->passenger;
+        $userRequest = $request->user;
+        $addressRequest = $request->address;
+        
+        $passenger->fill($passengerRequest);
+        $passenger->save();
+
+        $responsible = User::find($passenger->responsible_id);
+        $responsible->fill($userRequest);
+        $responsible->save();
+
+        $address = Address::find($passenger->address_id);
+        $address->fill($addressRequest);
+        $address->save();
+
     }
 
     /**
