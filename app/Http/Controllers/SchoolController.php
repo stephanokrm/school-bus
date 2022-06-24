@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
 use App\Models\School;
+use App\Models\Address;
 
 class SchoolController extends Controller
 {
@@ -15,7 +16,9 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        //
+        return School::where('driver_id',Auht::user()->id)
+                        ->with('address')
+                        ->get();
     }
 
     /**
@@ -25,8 +28,19 @@ class SchoolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StoreSchoolRequest $request)
-    {
-        //
+    {   
+        $address = new Address;
+        $address->fill($request->all());
+        $address->external_city_id = 1; //temporary
+        $address->save();
+
+        $school = new School;
+        $school->driver_id = Auht::user()->id;
+        $school->fill($request->all());
+        $school->address()->associate($address);
+        $school->save();
+        
+        return $school;
     }
 
     /**
@@ -37,7 +51,7 @@ class SchoolController extends Controller
      */
     public function show(School $school)
     {
-        //
+        return $school->load('address');
     }
 
     /**
@@ -49,7 +63,12 @@ class SchoolController extends Controller
      */
     public function update(UpdateSchoolRequest $request, School $school)
     {
-        //
+        $school->fill($request->all());
+        $school->save();
+
+        $address = Address::find($school->address_id);
+        $address->fill($request->all());
+        $address->save();
     }
 
     /**
@@ -60,6 +79,9 @@ class SchoolController extends Controller
      */
     public function destroy(School $school)
     {
-        //
+        $address = $school->address();
+        $school->delete();
+        $address->delete();
+
     }
 }

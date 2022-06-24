@@ -13,7 +13,7 @@ class StoreSchoolRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,12 @@ class StoreSchoolRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required','string','max:255'],
+            'number' => ['required','integer','min:1','max:9999999'],
+            'complement' => ['nullable','string','max:255'],
+            'neighborhood' => ['required','string','max:255'],
+            'street' => ['required','string','max:255'],
+            'zip_code' => ['required','string','size:8'],
         ];
     }
 }
