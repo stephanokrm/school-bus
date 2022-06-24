@@ -16,7 +16,7 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        return School::where('driver_id',Auht::user()->id)
+        return School::where('driver_id',Auth::user()->id)
                         ->with('address')
                         ->get();
     }
@@ -35,7 +35,7 @@ class SchoolController extends Controller
         $address->save();
 
         $school = new School;
-        $school->driver_id = Auht::user()->id;
+        $school->driver_id = Auth::user()->id;
         $school->fill($request->all());
         $school->address()->associate($address);
         $school->save();

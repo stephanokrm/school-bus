@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSchoolRequest extends FormRequest
+class UpdateSchoolRequest extends StoreSchoolRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,14 @@ class UpdateSchoolRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required','string','max:255'],
-            'number' => ['required','integer','min:1','max:9999999'],
-            'complement' => ['nullable','string','max:255'],
-            'neighborhood' => ['required','string','max:255'],
-            'street' => ['required','string','max:255'],
-            'zip_code' => ['required','string','size:8'],
+            ...parent::rules(),
+        ];
+    }
+    
+    public function attributes()
+    {
+        return [
+            ...parent::attributes(),
         ];
     }
 }
