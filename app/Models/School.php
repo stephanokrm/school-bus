@@ -30,4 +30,11 @@ class School extends Model
     public function address(): BelongsTo {
         return $this->belongsTo(Address::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function driver(): BelongsTo {
+        return $this->belongsTo(Driver::class);
+    }
 }

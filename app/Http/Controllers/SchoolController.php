@@ -6,40 +6,39 @@ use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
 use App\Models\School;
 use App\Models\Address;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class SchoolController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return Builder[]|Collection
      */
-    public function index()
+    public function index(): array|Collection
     {
-        return School::where('driver_id',Auth::user()->id)
-                        ->with('address')
-                        ->get();
+        return School::query()
+            ->whereBelongsTo(auth()->user())
+            ->with('address')
+            ->get();
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreSchoolRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  StoreSchoolRequest  $request
+     * @return School
      */
-    public function store(StoreSchoolRequest $request)
-    {   
+    public function store(StoreSchoolRequest $request): School
+    {
         $address = new Address;
         $address->fill($request->all());
-        $address->external_city_id = 1; //temporary
+        $address->setAttribute('external_city_id', 1);
         $address->save();
 
         $school = new School;
-        $school->driver_id = Auth::user()->id;
         $school->fill($request->all());
         $school->address()->associate($address);
+        $school->driver()->associate(auth()->user());
         $school->save();
-        
+
         return $school;
     }
 

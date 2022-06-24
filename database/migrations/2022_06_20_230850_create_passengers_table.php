@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignIdFor(Driver::class)->constrained();
             $table->foreignIdFor(User::class, 'responsible_id')->constrained('users');
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }
