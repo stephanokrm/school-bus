@@ -11,6 +11,18 @@ class Passenger extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'goes',
+        'returns',
+        'shift',
+    ];
+
+    /**
      * @var string[]
      */
     public $casts = ['goes:boolean', 'returns:boolean', 'shift:string'];
