@@ -54,7 +54,6 @@ class PassengerController extends Controller
         $passenger->driver_id = 1;
         $passenger->save();
 
-        return $passenger;
     }
 
     /**
