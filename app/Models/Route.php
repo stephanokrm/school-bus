@@ -11,6 +11,15 @@ class Route extends Model
     use HasFactory;
 
     /**
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'order',
+        'passenger_id',
+        'school_id'
+    ];
+
+    /**
      * @var string[]
      */
     public $casts = ['order:integer'];

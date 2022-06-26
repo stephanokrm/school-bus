@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Driver;
 use App\Models\Address;
 use App\Models\School;
+use App\Models\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
@@ -65,6 +66,18 @@ class PassengerController extends Controller
         $passenger->driver()->associate($driver);
         $passenger->school()->associate($school);
         $passenger->save();
+
+        $lastRoute = Route::whereHas('passenger', function($query) use ($driver){
+            $query->whereBelongsTo($driver);
+        })->orderBy('order','DESC')
+        ->first();
+        $order = isset($lastRoute->order) ? ($lastRoute->order+1) : 1;
+
+        $route = new Route;
+        $route->passenger()->associate($passenger);
+        $route->school()->associate($school);
+        $route->setAttribute('order', $order);
+        $route->save();
 
         return $passenger;
     }

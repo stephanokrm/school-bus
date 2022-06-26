@@ -61,11 +61,8 @@ class SchoolController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateSchoolRequest  $request
-     * @param  \App\Models\School  $school
-     * @return \Illuminate\Http\Response
+     * @param  UpdateSchoolRequest
      */
     public function update(UpdateSchoolRequest $request, School $school)
     {
@@ -78,10 +75,7 @@ class SchoolController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\School  $school
-     * @return \Illuminate\Http\Response
+     * @param  School  $school
      */
     public function destroy(School $school)
     {

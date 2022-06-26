@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Driver extends Model
 {
@@ -19,6 +20,13 @@ class Driver extends Model
      * @var string[]
      */
     protected $fillable = ['cnh'];
+
+    /**
+     * @return HasMany
+     */
+    public function passengers(): HasMany {
+        return $this->hasMany(Passengers::class);
+    }
 
     /**
      * @return BelongsTo

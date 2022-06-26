@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Passenger extends Model
 {
@@ -55,4 +56,10 @@ class Passenger extends Model
         return $this->belongsTo(School::class);
     }
 
+    /**
+     * @return HasMany
+     */
+    public function absences(): HasMany {
+        return $this->hasMany(Absence::class);
+    }
 }
