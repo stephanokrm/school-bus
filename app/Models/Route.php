@@ -15,14 +15,14 @@ class Route extends Model
      */
     protected $fillable = [
         'order',
-        'passenger_id',
-        'school_id'
     ];
 
     /**
      * @var string[]
      */
-    public $casts = ['order:integer'];
+    public $casts = [
+        'order:integer',
+    ];
 
     /**
      * @return BelongsTo

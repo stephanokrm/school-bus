@@ -22,9 +22,9 @@ class StoreRouteRequest extends FormRequest
     public function rules()
     {
         return [
-            '*.order' => ['required','numeric','min:1'],
-            '*.passenger_id' => ['required','numeric','exists:passengers,id'],
-            '*.school_id' => ['required','numeric','exists:schools,id']
+            '*.order' => ['required', 'numeric', 'min:1'],
+            '*.passenger_id' => ['required', 'numeric', 'exists:passengers'],
+            '*.school_id' => ['required', 'numeric', 'exists:schools']
         ];
     }
 }
