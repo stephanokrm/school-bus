@@ -8,28 +8,40 @@ use App\Models\Passenger;
 use App\Models\User;
 use App\Models\Driver;
 use App\Models\Address;
+use App\Models\School;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
 class PassengerController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return Builder[]|Collection
      */
-    public function index()
+    public function index(): array|Collection
     {
+        $driver = Driver::query()
+        ->whereBelongsTo(auth()->user())
+        ->first();
+
+        return Passenger::query()
+            ->whereBelongsTo($driver)
+            ->with('address')
+            ->with('responsible')
+            ->with('school')
+            ->get();
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StorePassengerRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  StorePassengerRequest  $request
+     * @return Passenger
      */
-    public function store(StorePassengerRequest $request)
+    public function store(StorePassengerRequest $request): Passenger
     {
+        $driver = Driver::query()
+        ->whereBelongsTo(auth()->user())
+        ->first();
+
         $userRequest = $request->user;
         $addressRequest = $request->address;
         $passengerRequest = $request->passenger;
@@ -41,46 +53,45 @@ class PassengerController extends Controller
 
         $address = new Address;
         $address->fill($addressRequest);
-        $address->external_city_id = 1; //temporary
+        $address->setAttribute('external_city_id', 1);
         $address->save();
 
-        $driver = Driver::find(Auth::user()->id);
+        $school = School::Find($passengerRequest['school_id']);
 
         $passenger = new Passenger;
         $passenger->fill($passengerRequest);
         $passenger->responsible()->associate($responsible);
         $passenger->address()->associate($address);
         $passenger->driver()->associate($driver);
-        $passenger->driver_id = 1;
+        $passenger->school()->associate($school);
         $passenger->save();
 
+        return $passenger;
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Passenger  $passenger
-     * @return \Illuminate\Http\Response
+     * @param  Passenger  $passenger
+     * @return Passenger
      */
-    public function show(Passenger $passenger)
+    public function show(Passenger $passenger): Passenger
     {
-        //
+        return $passenger->load('address','responsible','school');
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatePassengerRequest  $request
-     * @param  \App\Models\Passenger  $passenger
-     * @return \Illuminate\Http\Response
+     * @param  UpdatePassengerRequest  $request
+     * @param  Passenger  $passenger
      */
-    public function update(UpdatePassengerRequest $request, Passenger $passenger)
+    public function update(UpdatePassengerRequest $request, Passenger $passenger): Passenger
     {
         $passengerRequest = $request->passenger;
         $userRequest = $request->user;
         $addressRequest = $request->address;
         
+        $school = School::Find($passengerRequest['school_id']);
+
         $passenger->fill($passengerRequest);
+        $passenger->school()->associate($school);
         $passenger->save();
 
         $responsible = User::find($passenger->responsible_id);
@@ -91,16 +102,18 @@ class PassengerController extends Controller
         $address->fill($addressRequest);
         $address->save();
 
+        return $passenger;
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Passenger  $passenger
-     * @return \Illuminate\Http\Response
+     * @param Passenger  $passenger
      */
     public function destroy(Passenger $passenger)
     {
-        //
+        $address = $passenger->address();
+        $responsible = $passenger->responsible();
+        $address->delete();
+        $responsible->delete();
+        $passenger->delete();
     }
 }

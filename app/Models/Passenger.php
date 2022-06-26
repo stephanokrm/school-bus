@@ -47,4 +47,12 @@ class Passenger extends Model
     public function responsible(): BelongsTo {
         return $this->belongsTo(User::class, 'responsible_id');
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function school(): BelongsTo {
+        return $this->belongsTo(School::class);
+    }
+
 }

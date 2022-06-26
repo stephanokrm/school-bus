@@ -37,4 +37,11 @@ class School extends Model
     public function driver(): BelongsTo {
         return $this->belongsTo(Driver::class);
     }
+
+    /**
+     * @return HasMany
+     */
+    public function passengers(): HasMany {
+        return $this->hasMany(Passenger::class);
+    }
 }

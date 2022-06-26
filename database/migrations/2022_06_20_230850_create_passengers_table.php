@@ -3,6 +3,7 @@
 use App\Models\Address;
 use App\Models\Driver;
 use App\Models\User;
+use App\Models\School;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->foreignIdFor(Address::class)->constrained();
             $table->foreignIdFor(Driver::class)->constrained();
             $table->foreignIdFor(User::class, 'responsible_id')->constrained('users');
+            $table->foreignIdFor(School::class)->constrained();
             $table->id();
             $table->string('name');
             $table->timestamps();

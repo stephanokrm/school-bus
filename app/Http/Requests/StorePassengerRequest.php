@@ -17,8 +17,6 @@ class StorePassengerRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
      * @return array<string, mixed>
      */
     public function rules()
@@ -29,19 +27,23 @@ class StorePassengerRequest extends FormRequest
             'user.cpf' => ['required', 'string', 'size:11', 'unique:users,cpf'],
             'user.phone' => ['required', 'string', 'size:11'],
             
-            'address.number' => ['required','integer','min:1','max:9999999'],
+            'address.number' => ['required','numeric','min:1','max:9999999'],
             'address.complement' => ['nullable','string','max:255'],
             'address.neighborhood' => ['required','string','max:255'],
             'address.street' => ['required','string','max:255'],
             'address.zip_code' => ['required','string','size:8'],
 
             'passenger.name' => ['required', 'string', 'max:255'],
-            'passenger.goes' => ['nullable', 'integer'],
-            'passenger.returns' => ['nullable', 'integer'],
+            'passenger.goes' => ['nullable', 'numeric'],
+            'passenger.returns' => ['nullable', 'numeric'],
             'passenger.shift' => ['required','in:"M","A","N"'],
+            'passenger.school_id' => ['required','exists:schools,id'],
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function attributes()
     {
         return [
@@ -60,6 +62,7 @@ class StorePassengerRequest extends FormRequest
             'passenger.goes' => 'Ida',
             'passenger.returns' => 'Volta',
             'passenger.shift' => 'Turno',
+            'passenger.school_id' => 'Escola',
         ];
     }
 
