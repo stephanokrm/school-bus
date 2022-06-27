@@ -30,6 +30,7 @@ class PassengerController extends Controller
             ->with('address')
             ->with('responsible')
             ->with('school')
+            ->orderBy('name')
             ->get();
     }
 
@@ -123,10 +124,13 @@ class PassengerController extends Controller
      */
     public function destroy(Passenger $passenger)
     {
-        $address = $passenger->address();
-        $responsible = $passenger->responsible();
-        $address->delete();
-        $responsible->delete();
+        $address = $passenger->address_id;
+        $responsible = $passenger->responsible_id;
+
+        Route::where('passenger_id',$passenger->id)->delete();
         $passenger->delete();
+        Address::find($address)->delete();
+        User::find($responsible)->delete();
+        
     }
 }

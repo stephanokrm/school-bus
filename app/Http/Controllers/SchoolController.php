@@ -79,9 +79,8 @@ class SchoolController extends Controller
      */
     public function destroy(School $school)
     {
-        $address = $school->address();
+        $address = $school->address_id;
         $school->delete();
-        $address->delete();
-
+        Address::find($address)->delete();
     }
 }
