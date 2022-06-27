@@ -30,7 +30,7 @@ class RouteController extends Controller
                     $query->whereDate('absent_at', date('Y-m-d'));
                 });
             })
-            ->with('passenger')
+            ->with('passenger.address')
             ->with('school')
             ->orderBy('order')
             ->get();
