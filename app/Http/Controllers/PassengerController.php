@@ -52,7 +52,6 @@ class PassengerController extends Controller
 
         $address = new Address;
         $address->fill($request->get('address'));
-        $address->setAttribute('external_city_id', 1);
         $address->save();
 
         $passenger = new Passenger;
