@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAbsenceRequest;
 use App\Models\Absence;
+use App\Models\Driver;
 use App\Models\Passenger;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,10 +15,17 @@ class AbsenceController extends Controller
     /**
      * @return Builder[]|Collection
      */
-    public function index(): array | Collection
+    public function index(): array|Collection
     {
+        $driver = Driver::query()
+            ->whereBelongsTo(auth()->user())
+            ->firstOrFail();
+
         return Absence::query()
-            ->whereIn('passenger_id', Passenger::query()->whereBelongsTo(auth()->user(), 'responsible')->pluck('id'))
+            ->whereHas('passenger', function ($query) use ($driver) {
+                $query->whereBelongsTo($driver);
+            })
+            ->with('passenger')
             ->get();
     }
 
@@ -25,16 +33,23 @@ class AbsenceController extends Controller
      * @param  StoreAbsenceRequest  $request
      * @return Builder|Model
      */
-    public function store(StoreAbsenceRequest $request): Builder | Model
+    public function store(StoreAbsenceRequest $request): Builder|Model
     {
-        return Absence::query()->create($request->all());
+        $passenger = Passenger::query()->findOrFail($request->input('passenger_id'));
+
+        $absence = new Absence;
+        $absence->fill($request->all());
+        $absence->passenger()->associate($passenger);
+        $absence->save();
+
+        return $absence;
     }
 
     /**
      * @param  Absence  $absence
      * @return bool|null
      */
-    public function destroy(Absence $absence): bool | null
+    public function destroy(Absence $absence): bool|null
     {
         return $absence->delete();
     }

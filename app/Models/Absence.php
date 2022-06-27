@@ -10,6 +10,10 @@ class Absence extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'absent_at',
+    ];
+
     /**
      * @var string[]
      */

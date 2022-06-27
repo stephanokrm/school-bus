@@ -23,8 +23,8 @@ class StoreRouteRequest extends FormRequest
     {
         return [
             '*.order' => ['required', 'numeric', 'min:1'],
-            '*.passenger_id' => ['required', 'numeric', 'exists:passengers'],
-            '*.school_id' => ['required', 'numeric', 'exists:schools']
+            '*.passenger_id' => ['required', 'numeric', 'exists:passengers,id'],
+            '*.school_id' => ['required', 'numeric', 'exists:schools,id']
         ];
     }
 }

@@ -25,7 +25,7 @@ class StoreAbsenceRequest extends FormRequest
     {
         return [
             'absent_at' => ['required', 'date', 'after_or_equal:today'],
-            'passenger_id' => ['required', 'numeric', 'exists:passengers'],
+            'passenger_id' => ['required', 'numeric', 'exists:passengers,id'],
         ];
     }
 }
