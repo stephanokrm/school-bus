@@ -21,7 +21,7 @@ class StoreAddressRequest extends FormRequest
     {
         return [
             'number' => ['required', 'numeric', 'min:1', 'max:9999999'],
-            'complement' => ['sometimes', 'string', 'max:255'],
+            'complement' => ['nullable', 'string', 'max:255'],
             'neighborhood' => ['required', 'string', 'max:255'],
             'street' => ['required', 'string', 'max:255'],
             'zip_code' => ['required', 'string', 'size:8'],

@@ -39,7 +39,6 @@ class SchoolController extends Controller
 
         $address = new Address;
         $address->fill($request->all());
-        $address->setAttribute('external_city_id', 1);
         $address->save();
 
         $school = new School;

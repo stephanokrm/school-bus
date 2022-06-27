@@ -26,5 +26,8 @@ class Address extends Model
     /**
      * @var string[]
      */
-    public $casts = ['zip_code:string'];
+    public $casts = [
+        'external_city_id:integer',
+        'zip_code:string',
+    ];
 }
